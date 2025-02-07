@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listar Contratistas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Contratistas</h1>
+        <a href="{% url 'crearContratista' %}" class="btn btn-primary">Crear Contratista</a>
+        <ul class="list-group mt-3">
+            {% for contratista in contratistas %}
+                <li class="list-group-item">
+                    {{ contratista.nombre }} - {{ contratista.perfil }}
+                    <a href="{% url 'detalleContratista' contratista.pk %}" class="btn btn-info btn-sm">Ver Detalle</a>
+                    <a href="{% url 'editarContratista' contratista.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminarContratista' contratista.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

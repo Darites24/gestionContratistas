@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalle del Contratista</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalle del Contratista</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ contratista.nombre }}</h5>
+                <p class="card-text"><strong>Perfil:</strong> {{ contratista.perfil }}</p>
+                <p class="card-text"><strong>Dirección:</strong> {{ contratista.direccion }}</p>
+                <p class="card-text"><strong>Teléfono:</strong> {{ contratista.telefono }}</p>
+                {% if contratista.foto %}
+                    <img src="{{ contratista.foto.url }}" class="img-fluid" alt="Foto de {{ contratista.nombre }}" style="max-width: 150px;">
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'listarContratistas' %}" class="btn btn-primary mt-3">Volver a la lista</a>
+    </div>
+</body>
+</html>
