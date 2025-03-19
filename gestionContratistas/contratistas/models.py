@@ -30,6 +30,7 @@ class Contrato(models.Model):
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
     estado = models.CharField(max_length=10, choices=[('activo','Activo'), ('inactivo','Inactivo')])
+    salario = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
 class RegistroAccion(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)

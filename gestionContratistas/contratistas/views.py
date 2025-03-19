@@ -15,23 +15,43 @@ def crearContratista(request):
         form = ContratistaForm(request.POST, request.FILES)
         if form.is_valid():
             contratista = form.save()
-            salario = contratista.nivel_educativo.honorarios
-            contrato_pdf = generarContratoPdf(contratista, salario)
-            response = HttpResponse(contrato_pdf, content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="Contrato_{contratista.nombre}"'
-            return response
+            return redirect('listarContratistas')
     else:
         form = ContratistaForm()
     return render(request, 'contratistas/crear_Contratista.html', {'form':form})
     
 
-def generarContratoPdf(contratista, salario):
+def crearContrato(request, pk):
+    contratista = get_object_or_404(Contratista, pk=pk)
+
+    if request.method == 'POST':
+        form = ContratoForm(request.POST)
+        if form.is_valid():
+            contrato = form.save(commit=False)
+            contrato.contratista = contratista
+            contrato.salario = contratista.nivel_educativo.honorarios
+            contrato.save()
+            contrato_pdf = generarContratoPdf(contrato)
+            response = HttpResponse(contrato_pdf, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="Contrato_{contrato.contratista.nombre}.pdf"'
+            return response
+    else:
+        form = ContratoForm(initial={'contratista': contratista})
+
+    return render(request, 'contratistas/crear_Contrato.html', {'form': form})
+
+    
+
+def generarContratoPdf(contrato):
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
-    p.drawString(100, 750, f"Contrato de: {contratista.nombre}")
-    p.drawString(100, 700, f"Profesión: {contratista.profesion.nombre}")
-    p.drawString(100, 650, f"Nivel Educativo: {contratista.nivel_educativo.nombre}")
-    p.drawString(100, 600, f"Salario: {salario}")
+    p.drawString(100, 750, f"Contrato de: {contrato.contratista.nombre}")
+    p.drawString(100, 700, f"Profesión: {contrato.contratista.profesion.nombre}")
+    p.drawString(100, 650, f"Nivel Educativo: {contrato.contratista.nivel_educativo.nombre}")
+    p.drawString(100, 600, f"Salario: {contrato.salario}")
+    p.drawString(100, 550, f"Fecha Inicio: {contrato.fechaInicio}")
+    p.drawString(100, 500, f"Fecha Fin: {contrato.fechaFin}")
+    p.drawString(100, 450, f"Fecha Fin: {contrato.estado}")
     p.showPage()
     p.save()
     buffer.seek(0)
