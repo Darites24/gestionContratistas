@@ -8,6 +8,10 @@
     <div class="container">
         <h1>Contratistas</h1>
         <a href="{% url 'crearContratista' %}" class="btn btn-primary">Crear Contratista</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link" style="text-decoration: none; color: inherit;">Cerrar Sesión</button>
+        </form>        
         <ul class="list-group mt-3">
             {% for contratista in contratistas %}
                 <li class="list-group-item">
@@ -16,7 +20,6 @@
                     <a href="{% url 'editarContratista' contratista.pk %}" class="btn btn-warning btn-sm">Editar</a>
                     <a href="{% url 'eliminarContratista' contratista.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
                     <a href="{% url 'crearContrato' contratista.pk %}" class="btn btn-success btn-sm">Generar Contrato</a>
-
                 </li>
             {% endfor %}
         </ul>
